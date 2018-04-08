@@ -48,29 +48,36 @@ def isGuessedWord(letter, lettersGuessed, guessed):
 
     return guessed
 
-def hangman(secretWord):
+def showWelcomeMessage(secretWord):
 
-    guesses = 8
-    lettersGuessed = []
     print 'Welcome to the game, Hangam!'
     print 'I am thinking of a word that is', len(secretWord), ' letters long.'
     print '-------------'
 
+def manageAvailableLetters(available, lettersGuessed):
+    for letter in available:
+        if letter in lettersGuessed:
+            available = available.replace(letter, '')
+
+    print 'Available letters', available
+    print '------------'
+
+def hangman(secretWord):
+
+    guesses = 8
+    lettersGuessed = []
+
+    showWelcomeMessage(secretWord)
 
 
     while  isWordGuessed(secretWord, lettersGuessed) == False and guesses >0:
+
         print 'You have ', guesses, 'guesses left.'
 
-
         guessed = getGuessedWord()
+
         available = getAvailableLetters()
-
-        for letter in available:
-            if letter in lettersGuessed:
-                available = available.replace(letter, '')
-
-        print 'Available letters', available
-        print '------------'
+        manageAvailableLetters(available, lettersGuessed)
 
         letter = raw_input('Please guess a letter: ')
         print '------------'
@@ -78,22 +85,21 @@ def hangman(secretWord):
         if letter in lettersGuessed:
 
             guessed = isGuessedWord(letter, lettersGuessed, guessed)
-
             print 'Oops! You have already guessed that letter: ', guessed
 
         elif letter in secretWord:
+
             lettersGuessed.append(letter)
 
             guessed = isGuessedWord(letter, lettersGuessed, guessed)
-
             print 'Good Guess: ', guessed
 
         else:
+
             guesses -=1
             lettersGuessed.append(letter)
 
             guessed = isGuessedWord(letter, lettersGuessed, guessed)
-
             print 'Oops! That letter is not in my word: ',  guessed
             print '------------'
 
